@@ -1,0 +1,9 @@
+[run]
+omit =
+    tests/conftest.py
+
+[report]
+precision = 1
+
+[xml]
+output = coverage.xml

@@ -1,0 +1,16 @@
+venv
+build
+doc/build
+dist
+*.egg-info
+*.swp
+*.swn
+*.swo
+*.pyc
+.idea
+.python-version
+.ropeproject
+\#*\#
+.eggs
+.pytest_cache/
+.coverage
