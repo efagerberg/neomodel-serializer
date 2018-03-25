@@ -3,12 +3,13 @@ import json
 from mock import patch
 
 from neomodel import (
+    db, clear_neo4j_database,
     ArrayProperty, IntegerProperty,
     StructuredNode, StructuredRel,
     StringProperty, RelationshipFrom
 )
 import pytest
-from serializers import StructuredThingSerializer
+from neomodel_serializer.serializers import StructuredThingSerializer
 
 
 class Person(StructuredNode):
@@ -30,15 +31,20 @@ class Movie(StructuredNode):
 
 @pytest.fixture()
 def movie():
-    movie = Movie(title="Space Cop", released=2016).save()
-    yield movie
-    movie.delete()
+    yield Movie(title="Space Cop", released=2016).save()
+    clear_neo4j_database(db)
 
+
+@pytest.fixture()
+def movies():
+    for i in range(2):
+        Movie(title=i, released=2016).save()
+    clear_neo4j_database(db)
 
 
 @pytest.fixture()
 def mock_isinstance():
-    path = 'serializers.isinstance'
+    path = 'neomodel_serializer.serializers.isinstance'
     with patch(path) as m:
         yield m
 
@@ -99,3 +105,19 @@ def test_raises_on_non_property_non_rel_def(movie, mock_isinstance):
     mock_isinstance.return_value = False
     with pytest.raises(ValueError):
         StructuredThingSerializer(movie)
+
+
+def test_serialize_many(movies):
+    """StructuredThingSerializer should be able to serialize
+    many movies"""
+    qs = Movie.nodes
+    expected = [{
+        'id': movie.id,
+        'actors': [],
+        'directors': [],
+        'released': movie.released,
+        'tagline': movie.tagline,
+        'title': movie.title,
+    } for movie in qs]
+    actual = StructuredThingSerializer(qs, many=True).data
+    assert actual == expected

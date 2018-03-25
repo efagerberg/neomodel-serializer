@@ -14,3 +14,4 @@ dist
 .eggs
 .pytest_cache/
 .coverage
+docker-compose.yml

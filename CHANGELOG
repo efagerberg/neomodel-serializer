@@ -1,3 +1,5 @@
+Version 0.0.1.dev2
+ * Adding the ability to serialize many entries, make sure there is a subfolder
 
-Version 0.0.1
+Version 0.0.1.dev1
  * Starting version, includes base ability to serialize StructuredNode and StructuredRel

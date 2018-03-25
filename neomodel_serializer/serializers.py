@@ -20,14 +20,21 @@ class StructuredThingSerializer(object):
         """
         self.instance = args[0]
         self.fields = kwargs.get('fields', '__all__')
-        self.data = OrderedDict()
+        self.many = kwargs.get('many')
 
-        props = self.instance.defined_properties()
+        if self.many:
+            self.data = []
+            for i in self.instance:
+                entry_data = StructuredThingSerializer(i).data
+                self.data.append(entry_data)
+        else:
+            self.data = OrderedDict()
+            props = self.instance.defined_properties()
 
-        if self.should_include('id'):
-            self.data['id'] = self.instance.id
+            if self.should_include('id'):
+                self.data['id'] = self.instance.id
 
-        self.process_properties(props)
+            self.process_properties(props)
         self.serialized_data = json.dumps(self.data)
 
     def should_include(self, key):

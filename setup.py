@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='neomodel-serializer',
-    version='0.0.1.dev1',
+    version='0.0.1.dev2',
     description='Serialize neomodels',
     long_description=open('README.rst').read(),
     author='Evan Fagerberg',
@@ -12,7 +12,7 @@ setup(
     url='http://github.com/efagerberg/neomodel-serializer',
     license='MIT',
     packages=find_packages(exclude=('tests',)),
-    keywords='neo4j neomodel',
+    keywords='neo4j neomodel serializer',
     install_requires=['neomodel>=3.2.5', 'six'],
     setup_requires=['pytest-runner'] 
         if any(x in ('pytest', 'test') for x in sys.argv) else [],
